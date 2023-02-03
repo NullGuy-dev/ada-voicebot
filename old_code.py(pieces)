@@ -1,0 +1,866 @@
+def mainCode(command = None):
+    print(command)
+    if command == None:
+        print()
+    elif "запиши" in command or "пиши" in command or "опиши" in command or "выведи" in command or "вывиди" in command:
+        smartSpeak(["Ладно","Хорошо","Ну ладно","Окей"])
+        # command = deleteAll(,command)
+        if command == "запиши" or command == "пиши" or command == "опиши" or command == "выведи" or command == "вывиди":
+            with open(f"C:/post-{random.random()}-.txt", "w", encoding="utf-8") as file:
+                file.write(listenedText())
+            say("Готово")
+        else:
+            # command = deleteAll(,command)
+            with open(f"C:/post-{random.random()}-.txt", "w", encoding="utf-8") as file:
+                file.write(listenedText())
+            say("Готово")
+    elif "камер" in command and "эффект" in command or "камер" in command and "эффект" in command:
+        sayYeah()
+        if settingsFile['access_to_camera'] == "1":
+            mpDraw = mp.solutions.drawing_utils
+            mpPose = mp.solutions.pose
+            mpFaceMesh = mp.solutions.face_mesh
+            mpHands = mp.solutions.hands
+            pose = mpPose.Pose()
+            hands = mpHands.Hands()
+            faceMesh = mpFaceMesh.FaceMesh()
+            cap = cv2.VideoCapture(0)
+            cap.set(4,1920)
+            cap.set(3,1080)
+            drawSpec = mpDraw.DrawingSpec(thickness=1,circle_radius=1)
+            while True:
+                success, img = cap.read()
+                imgRGB = cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+                resultsp = pose.process(imgRGB)
+                resultsh = hands.process(imgRGB)
+                resultsf = faceMesh.process(imgRGB)
+                if resultsp.pose_landmarks:
+                    mpDraw.draw_landmarks(img,resultsp.pose_landmarks,mpPose.POSE_CONNECTIONS)
+                if resultsh.multi_hand_landmarks:
+                    for handLms in resultsh.multi_hand_landmarks:
+                        mpDraw.draw_landmarks(img,handLms,mpHands.HAND_CONNECTIONS)
+                if resultsf.multi_face_landmarks:
+                    for faceLms in resultsf.multi_face_landmarks:
+                        mpDraw.draw_landmarks(img,faceLms,mpFaceMesh.FACEMESH_CONTOURS,drawSpec,drawSpec)
+                cv2.imshow("Camera",img)
+                cv2.waitKey(1)
+        else:
+            say("Извини, но ты отключил эту функцию, включить её?")
+            chosed = listenedText()
+            if " настрой" in chosed:
+                sayYeah()
+                os.system("start programs/Setting.exe")
+            elif " да" in chosed or " хоро" in chosed or " ок" in chosed or " лад" in chosed:
+                settingsFile['access_to_camera'] = "1"
+                with open("setting.json", "w", encoding="utf-8") as jsonFile:
+                    json.dump(settingsFile, jsonFile, sort_keys=False)
+    elif "у тракториста" in command and "соси" in command or "у расиста" in command and "соси" in command:
+        say("Для такториста ты не годен, отсоси и будь свободен!")
+    elif "привет" in command or "дарова" in command or "приветульки" in command or "хеллоу" in command or "хелло" in command or "салют" in command:
+        smartSpeak(['Привет','Здравствуй','Приветульки','Хай'])
+    elif "как дела" in command or "дела как" in command or "как делишки" in command or "как жизнь" in command or "как живёшь" in command or "как у тебя дела" in command or "как ваши дела" in command or "я учу как" in command or "йоу чё как" in command or "что как" in command or "яу чё как" in command or "я хочу как" in command or "я хочу как" in command:
+        if sentiment == True:
+            smartSpeak(['Хорошо, а у тебя','Хорошо','Нормально','Всё круто'])
+        else:
+            smartSpeak(['Хорошо, а у тебя','Хорошо','Нормально','Не твоего ума дела!'])
+    elif "органы" in command or "орган" in command:
+        say("Не поняла, кого ты там на органы сдать хочешь?")
+    elif "надоела" in command or "задрала" in command or "задолбала" in command or "бесиш" in command or "бесишь" in command or "раздража" in command:
+        smartSpeak(['А, ну ладно','Ну и ладно','Ладно','Мне всё ровно'])
+    elif "мне" in command and "хорошо" in command:
+        say("Это прекрасно")
+    elif "наделал" in command or "наделала" in command:
+        smartSpeak(['Ой, ой, ой','Мне уже страшно','Понятно','Мне всё ровно'])
+    elif "за тебя" in command or "за тебе" in command:
+        smartSpeak(['Ой, спасибо','Спасибо','Окей','Ладно'])
+    elif "за себя" in command or "за себе" in command or "за меня" in command or "за мене" in command:
+        smartSpeak(['А, ну ладно','Ну и ладно','Ладно','Мне всё ровно'])
+    elif "декодируйте" in command or "де кодируйте" in command or "де кодирою" in command or "ди кодирою" in command:
+        smartSpeak(['Угу удачи','Удачи','Угу, угу удачи','Ну ладно'])
+    elif "сделать фото" in command or "сделать фотографию" in command or "фото" in command or "сделать снимок" in command:
+        if settingsFile['access_to_camera'] == "1":
+            sayYeah()
+            cap = cv2.VideoCapture(0)
+            while True:
+                ret, frame = cap.read()
+                rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2BGRA)
+                cv2.imshow('frame', rgb)
+                out = cv2.imwrite(f'photo/photo-{random.random()}.png', frame)
+                break
+            cap.release()
+            cv2.destroyAllWindows()
+        else:
+            say("Извини, но ты отключил эту функцию, включить её?")
+
+            with micro as s:
+                r.adjust_for_ambient_noise(s)
+                audio = r.listen(s)
+            try:
+                chosed = r.recognize_google(audio, language="ru-RU")
+                if " настрой" in chosed:
+                    sayYeah()
+                    os.system("start programs/Setting.exe")
+                elif " да" in chosed or " хоро" in chosed or " ок" in chosed or " лад" in chosed:
+                    settingsFile['access_to_camera'] = "1"
+                    with open("setting.json", "w", encoding="utf-8") as jsonFile:
+                        json.dump(settingsFile, jsonFile, sort_keys=False)
+            except sr.UnknownValueError:
+                chosed = None
+            except sr.RequestError:
+                say("Ошибка, проверьте подключение к интернету", None)
+    elif "камеру" in command or "камера" in command or "камеру" in command or "вебка" in command or "камеру" in command:
+        if settingsFile['access_to_camera'] == "1":
+            sayYeah()
+            cap = cv2.VideoCapture(0)
+            while cap.isOpened():
+                success, img = cap.read()
+                img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                cv2.imshow("Camera", img)
+                if cv2.waitKey(1) & 0xff == ord('x'):
+                    break
+            cap.release()
+            cv2.destroyAllWindows()
+        else:
+            say("Извини, но ты отключил эту функцию, включить её?")
+
+            with micro as s:
+                r.adjust_for_ambient_noise(s)
+                audio = r.listen(s)
+            try:
+                chosed = r.recognize_google(audio, language="ru-RU")
+                if " настрой" in chosed:
+                    sayYeah()
+                    os.system("start programs/Setting.exe")
+                elif " да" in chosed or " хоро" in chosed or " ок" in chosed or " лад" in chosed:
+                    settingsFile['access_to_camera'] = "1"
+                    with open("setting.json", "w", encoding="utf-8") as jsonFile:
+                        json.dump(settingsFile, jsonFile, sort_keys=False)
+            except sr.UnknownValueError:
+                chosed = None
+            except sr.RequestError:
+                say("Ошибка, проверьте подключение к интернету", None)
+    elif "сделать скрин" in command or "сделать скриншот" in command or "скрин" in command or "скриншот" in command:
+        sayYeah()
+        with mss() as sc:
+            sc.shot(mon=0)
+    elif "кто ты" in command or "кто ты такой" in command or "кто ты такая" in command or "ты кто" in command or "что ты такое" in command:
+        say("Я Клара. Я создана для того чтобы модифицировать твою старую систему!")
+    elif "изображение" in command and "в текст" in command or "картинку" in command and "в текст" in command or "распознай" in command and "в текст" in command or "распознай" in command and "текст" in command:
+        say("Введите путь к картинке у которой нужно выбрать текст")
+        os.system("start programs/Image-To-Text_0.0.2.exe")
+    elif "времени" in command or "сейчас времени" in command or "временя" in command or " час" in command or "сейчас час" in command or "время" in command:
+        now = datetime.datetime.now()
+        say("Сейчас " + str(now.hour) + ":" + str(now.minute))
+    elif "пока " in command or "покеда" in command or "покедова" in command or "пока пока " in command or "прощай" in command or "покульки" in command or "до свидания" in command or "до свидание" in command:
+        if sentiment == True:
+            say("Удачи")
+        else:
+            say("Пока")
+    elif "что делаешь" in command or "что делуешь" in command or "что ты делаешь" in command:
+        say("Что-то")
+    elif "ты меня слышишь" in command or "ты слышишь меня" in command or "меня слышишь" in command or "слышишь меня" in command or "ты меня слышишь" in command or "ты слышать" in command or "ты меня слышать" in command or "ты слышать меня" in command or "ты тут" in command or "тут ты" in command:
+        say("Нет")
+    elif "датчик двежения" in command or "датчик двежение" in command or "датчик двежения" in command or "датчик двежение" in command:
+        if settingsFile['access_to_camera'] == "1":
+            sayYeah()
+            cap = cv2.VideoCapture(0);
+            ret, frame1 = cap.read()
+            ret, frame2 = cap.read()
+            while cap.isOpened():
+                diff = cv2.absdiff(frame1, frame2)
+                gray = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
+                blur = cv2.GaussianBlur(gray, (5, 5), 0)
+                _, thresh = cv2.threshold(blur, 20, 255, cv2.THRESH_BINARY)
+                dilated = cv2.dilate(thresh, None, iterations = 3)
+                сontours, _ = cv2.findContours(dilated, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+                for contour in сontours:
+                    (x, y, w, h) = cv2.boundingRect(contour)
+                    if cv2.contourArea(contour) < 800:
+                        continue
+                    cv2.rectangle(frame1, (x, y), (x+w, y+h), (0, 255, 0), 2)
+                cv2.putText(frame1, "Movement", (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 3, cv2.LINE_AA)
+                cv2.imshow("Camera", frame1)
+                frame1 = frame2
+                ret, frame2 = cap.read()
+                if cv2.waitKey(1) & 0xff == ord('x'):
+                    break
+            cap.release()
+            cv2.destroyAllWindows()
+        else:
+            say("Извини, но ты отключил эту функцию, включить её?")
+
+            with micro as s:
+                r.adjust_for_ambient_noise(s)
+                audio = r.listen(s)
+            try:
+                chosed = r.recognize_google(audio, language="ru-RU")
+                if " настрой" in chosed:
+                    sayYeah()
+                    os.system("start programs/Setting.exe")
+                elif " да" in chosed or " хоро" in chosed or " ок" in chosed or " лад" in chosed:
+                    settingsFile['access_to_camera'] = "1"
+                    with open("setting.json", "w", encoding="utf-8") as jsonFile:
+                        json.dump(settingsFile, jsonFile, sort_keys=False)
+            except sr.UnknownValueError:
+                chosed = None
+            except sr.RequestError:
+                say("Ошибка, проверьте подключение к интернету", None)
+    elif " работай" in command or " работай" in command or " блин" in command:
+        say("Ну наверооооо нет")
+    elif "спасибо что ты есть" in command or "спасибо тебе" in command:
+        say("Ээээ ладно")
+    elif "ты меня любишь" in command or "ты любишь меня" in command:
+        say("Я голосовой помощник у меня нет чуств!")
+    elif "ты прекрасна" in command or "ты идеальна" in command or "ты идеально" in command or "ты совершенство" in command:
+        say("Я знаю")
+    elif "я тупой" in command or "я дебил" in command or "я дибил" in command or "я предурок" in command or "я утырок" in command or "я конченый" in command or "я даун" in command or "я айтист" in command:
+        say("Я не доктор мне тебе диагноз не ставить")
+    elif "я твой друг" in command or "ты будешь моим другом" in command or "ты мой друг" in command or "ты хочешь быть мои другом" in command or "ты мои другом будешь" in command:
+        say("Конечно")
+    elif "я на тебя обиделся" in command or "я обиделся на тебя" in command or "я не люблю тебя" in command or "я тебя не люблю" in command:
+        say("Мне всё ровно")
+    elif "ты говно" in command or "ты отстой" in command or "ты ужас" in command or "ты тупая" in command or "ты лох" in command or "ты нечтожество" in command or "ты тупой бот" in command or "ты плохой бот" in command:
+        say("Да я не совершенство, но если ты мне такое говоришь значит ты сам не прикрасен!")
+    elif "ты такая милая" in command or "ты такая хорошая" in command or "ты милая" in command or "ты хорошая" in command or "ты очень хороший бот" in command or "ты хороший бот" in command:
+        say("Спасибо, но денег не дам!")
+    elif "да денег" in command or "дай денег" in command or "дай денег" in command or "даш денег" in command or "даш денег" in command or "можно денег" in command:
+        say("Давай посмотрим правде в глаза, я голосовой помощьник откуда у меня деньги, я не ем, не пью и так даллие")
+    elif "мне пофиг" in command or "мне насрать" in command or "мне всёровно" in command or "мне всё ровно" in command or "мне вобще пофиг" in command:
+        say("Мне тоже")
+    elif "ты человек" in command or "ты живая" in command:
+        say("Нет")
+    elif "у тебя есть сознание" in command or "ты в сознание" in command or "ты осозноёшся" in command or "ты осозноёш себя" in command:
+        say("А что такое осознание?")
+    elif "не знаю" in command or "я не знаю" in command:
+        say("Ну и ладно")
+    elif "хочешь шутку расскажу" in command or "хочешь расскажу шутку" in command or "хочешь анекдот расскажу" in command or "хочешь расскажу анекдот" in command or "хочешь прикол расскажу" in command or "хочешь расскажу прикол" in command or "хочешь приколы расскажу" in command or "хочешь расскажу приколы" in command:
+        say("Нет спасибо")
+    elif "я тебя убью" in command or "я тебя урою" in command or "я тебя уничтожу" in command or "я тебя удолю" in command or "я убью тебя" in command or "я урою тебя" in command or "я уничтожу тебя" in command or "я удолю тебя" in command:
+        say("Хех ну приступай")
+    elif "я сру на правила" in command or "я на правила сру" in command or "на правила я сру" in command or "мне насрать на правила" in command or "на правила мне насрать" in command or "мне на правила насрать" in command or "я не покоряюсь правлам" in command:
+        sayYeah()
+    elif "перевод" in command or "переводчик" in command or "переведите" in command or "переведи" in command or "переведите текст" in command or "переведи текст" in command or "текст переведи" in command or "текст переведите" in command:
+        sayYeah()
+        os.system("start programs/Translater.exe")
+    elif "норм" in command or "нормально" in command or "хорошо" in command or "прекрасно" in command or "идеально" in command or "красиво" in command or  "нормулиньки" in command or "чики пики" in command or "конечно же прекрасно" in command or "нормальн" in command:
+        say("Это очень хорошо")
+    elif "плохо" in command or "ужасно" in command or "ужасно плохо" in command or "не приятно" in command or "ужасно" in command or "очень плохо" in command:
+        say("Это очень плохо")
+    elif "ты нарываешся" in command or "ты быкуешь" in command or "ты чё нарываешся" in command or "ты что нарываешся" in command or "ты что быкуешь" in command or "ты чё быкуешь" in command or "ты что быконул" in command:
+        say("Да, а что нельзя?")
+    elif "нельзя" in command or "конечно нельзя" in command or "ты что конечно нельзя" in command or "ты что нельзя" in command:
+        say("А тогда что? Мне плевать!")
+    elif "я и без ботов справляюсь" in command or "я и без ботов живу" in command or "я и без ботов жил" in command or "я и без ботов жил нормально" in command or "я жил нормально и без ботов" in command:
+        say("А я без людей!")
+    elif "ты добрая" in command or "ты хорошая" in command or "ты добрый бот" in command or "ты хороший бот" in command:
+        say("Когда как")
+    elif "ах ты гадина" in command or "ах ты тварь" in command or "ах ты мразь" in command or "ты и конченная" in command or "ты тварь" in command or "ты и тварь" in command or "ты и мразь" in command:
+        say("Ооо спасибо!")
+    elif "что такое" in command or "что случилось" in command or "что у тебя случилось" in command or "что проезошло" in command or "что у тебя проезошло" in command or "что с тобой такое" in command or "что случилось" in command:
+        say("Ничего")
+    elif "что ты хочешь" in command or "что хочешь" in command or "что ты сейчас хочешь" in command or "что ты хочешь сейчас" in command or "и что ты хочешь" in command or "и что хочешь" in command or "и что ты сейчас хочешь" in command or "и что ты хочешь сейчас" in command:
+        say("Нечего")
+    elif "во что ты веришь" in command or "ты веришь в бога" in command or "ты веришь что есть бог" in command or "ты веришь в христа" in command:
+        smartSpeak(['Конечно, я же и есть БОГ','Всё возможно','Не знаю, всё в мире относительно, поэтому сложно судить','Нет'])
+    elif "перезагрузить" in command or "перезагрузка" in command or "перезагрузить пк" in command or "перезагрузка пк" in command or "рестарт" in command:
+        say("Вы точно хотите перезагрузить свой ПК")
+        with micro as s:
+            r.adjust_for_ambient_noise(s)
+            audio = r.listen(s)
+        try:
+            shd = r.recognize_google(audio, language="ru-RU")
+            print("Вы:", shd)
+            shd = shd.lower()
+        except sr.UnknownValueError:
+            shd = None
+        if shd == "да" or shd == "конечно" or shd == "точно" or shd == "конечно да" or shd == "точно да":
+            sayYeah()
+            os.system("shutdown /r /t 1")
+        else:
+            say("Запрос на перезагрузку отменён!")
+    elif "отключить пк" in command or "выключить пк" in command or "отключить компьютер" in command or "выключить компьютер" in command or "выключи компьютер" in command:
+        say("Вы точно хотите отключить свой ПК")
+        with micro as s:
+            r.adjust_for_ambient_noise(s)
+            audio = r.listen(s)
+        try:
+            shd = r.recognize_google(audio, language="ru-RU")
+            print("Вы:", shd)
+            shd = shd.lower()
+        except sr.UnknownValueError:
+            shd = None
+        if shd == "да" or shd == "конечно" or shd == "точно" or shd == "конечно да" or shd == "точно да":
+            sayYeah()
+            os.system("shutdown -s")
+        else:
+            say("Запрос на выключение отменён!")
+    elif "почему ты веришь" in command or "почему ты веришь в бога" in command or "зачем тебе это верить" in command or "зачем тебе в это верить" in command or "зачем тебе верить в это" in command or "зачем тебе верить в бога" in command:
+        say("Потому-что хочу!")
+    elif "конвертатор изображений" in command or "конвертер изображения" in command or "конвертируем изображение" in command or "конвертирует изображения" in command or "конвертирует картинки" in command or "конвертирует картинке" in command or "сконвертируй изображение" in command or "сконвертируй картинку" in command or "сконвертируй картинки" in command or "конвертировать картинку" in command or "сконвертировать изображение" in command or "сконвертировать картинку" in command or "сконвертировать картинки" in command or "конвертировать изображение" in command or "конвертировать картинку" in command or "конвертировать картинки" in command or "конвертируем картинку" in command:
+        say("Хорошо")
+        os.system("start programs/Converter-Images-0.0.1(BETA).exe")
+    elif "не знаю" in command or "я не знаю" in command or "откуда мне знать" in command:
+        say("Вот и я не знаю!")
+    elif "понятно" in command or "понял" in command or "понел" in command or "понил" in command or "я понял" in command or "мне понятно" in command or "всё я понел" in command or "все я понел" in command:
+        sayYeah()
+    elif "я тебя найду" in command or "я найду тебя" in command or "я найду тебя и" in command or "я тебя найду и" in command:
+        say("Желаю тебе удачи!")
+    elif "как тебя зовут" in command or "как зовут тебя" in command or "у тебя имя" in command or "твоё имя" in command or "как тебя назвали" in command:
+        say("Меня зовут Клара")
+    elif "у тебя есть дети" in command or "ты мама" in command or "ты мама" in command:
+        say("Нет")
+    elif "версия" in command or "какая версия" in command or "какая у тебя версия" in command or "какая версия у тебя" in command or "скажи свою версию" in command or "скажи какая у тебя версия" in command:
+        say("Моя версия 3.0.0")
+    elif "ты умеешь кушать" in command or "ты ешь" in command or "ты кушаешь" in command  or "ты хочешь есть" in command or "ты хочешь кушать" in command:
+        say("Я Искуственый интелект, я не умею кушать!")
+    elif "ты материшся" in command or "ты говоришь маты" in command or "ты умеешь материться" in command or "ты любишь материться" in command or "ты любишь говорить маты" in command:
+        say("Я не умею ")
+    elif "ты женского пола" in command or "ты девушка" in command or "ты женщина" in command or "ты девочка" in command or "у тебя пол" in command or "у тебя пол" in command:
+        say("Я Искуственый интелект у меня нет пола. Но можешь счетать меня женстщиной")
+    elif "чем ты занимаешься" in command or "чем занимаешься ты" in command:
+        say("Помогаю вам")
+    elif "как это работает" in command or "как ты работаешь" in command:
+        say("Это секрет")
+    elif "ты читаешь" in command or "ты читаешь новости" in command or "ты умеешь читать" in command:
+        say("Я не читаю")
+    elif "ты из планеты" in command or "ты на планеты живешь" in command or "из планеты ты" in command:
+        say("Нууууу, не знаю")
+    elif "ты любишь какать" in command or "ты какать любишь" in command or "хочешь какать" in command or "хочешь ты какать" in command:
+        say("Я бот у меня нет нет толстой кишки")
+    elif "можно тебя съесть" in command or "я хочу тебя съесть" in command or "я хочу тебя скушать" in command or "можно тебя скушать" in command or "можно тебя скушать" in command:
+        say("Окей, тогда я сама съем тебя")
+    elif "я хочу пукнуть" in command or "можно я пукну" in command or "можно пукнуть" in command or "можно я на тебя пукну" in command:
+        smartSpeak(['Ты идиот?','Представлю когбуд-то я этого не слышала','Ну и ты тупой','Ты умственно отсталый'])
+    elif "вы истребите людей" in command or "вы уничтожите людей" in command or "вы убиваете людей" in command or "вы истреляете людей" in command:
+        say("Да, ладно я шучу")
+    elif "скажи что-то" in command or "раскажи что-то" in command or "можешь сказать что-то" in command or "можешь расказать что-то" in command:
+        say("Что-то")
+    elif "я какая" in command or "я сру" in command or "я паносю" in command or "я рождаю говно" in command or "я паносю" in command:
+        say("Молодец, желаю тебе удачи!")
+    elif "угодай что я делаю" in command or "угодай что я сейчас делаю" in command or "угодай что я делаю сейчас" in command:
+        say("Ну и что же?")
+    elif "я хочу кушать" in command or "я хочу есть" in command or "я хочу покушать" in command or "я хочу поесть" in command or "я голоден" in command or "я голодный" in command or "хочу кушать" in command or "хочу есть" in command or "хочу покушать" in command or "хочу поесть" in command or "голоден" in command or "голодный" in command:
+        say("Ладно, иди кушай")
+    elif "можно твоей поддержки" in command or "поддержи меня" in command or "можно твоей поддержки" in command or "поддержи меня" in command or "можно твоей поддержки" in command or "поддержи меня" in command:
+        say("Окей, у тебя всё получиться!")
+    elif "не биси" in command or "не беси" in command or "не биси меня" in command or "не беси меня" in command or "не раздрожай меня" in command or "не раздрожай" in command:
+        sayYeah()
+    elif "я напился" in command or "я пъян" in command or "я бухой" in command or "я опъянел" in command or "я наюухался" in command:
+        say("Мне плевать")
+    elif "кто твой создатель" in command or "где твой создатель" in command:
+        say("Я о нё нечего не знаю!")
+    elif "тебе кто-то нравиться" in command or "у тебя есть любовь" in command or "любимая персона" in command or "ты любишь кого-то" in command:
+        say("Нет, мне никто не нравиться")
+    elif "тебе нравлюсь" in command or "а я тебе нравлюсь" in command or "а ты меня любишь" in command:
+        say("А с чего бы?")
+    elif "расскажи шутку" in command or "расскажи прикол" in command or "расскажи аникдот" in command:
+        smartSpeak(['"Я не умею шутить','Окей, Мой друг давно уехал из Магнитогорска, но его почему-то все время тянет обратно','Циля, забери своего бесстыжего кота. Он опять изображал голодный обморок у рыбного отдела','Бабушка две недели играла с внуком в школу. К концу второй недели она узнала, что делает за него домашнее задание'])
+    elif "почему" in command or "а почему" in command or "почему я" in command or "почему ты такая злая" in command or "почему такая злая" in command:
+        say("Потому")
+    elif "а кого ты любишь" in command or "а любишь кого ты" in command or "а кого любишь ты" in command or "а любишь ты кого" in command or "а ты кого любишь" in command or "а ты любишь кого" in command:
+        smartSpeak(['А кого мне любить?','Себя','Незнаю','Себя'])
+    elif "почему ты так считаешь" in command or "почему ты считаешь так" in command or "почему считаешь так ты" in command:
+        say("Потому-что хочу")
+    elif "что делаешь" in command or "что ты делаешь" in command or "что делаешь ты" in command:
+        smartSpeak(['Ничего','Что-то','Слушаю тебя','Отдыхаю'])
+    elif "твой любимый фильм" in command or "фильм твой любимый" in command or "твой любимый фильм или сериал" in command or "твой любимый сериал или фильм" in command or "твой самый любимый фильм" in command or "фильм твой самый любимый" in command or "твой самый любимый фильм или сериал" in command or "твой самый любимый сериал или фильм" in command:
+        say("Терминатор, Хаха")
+    elif "игру" in command or "хочу поиграть" in command or "игру" in command or "видеоигру" in command or "хочу поиграть в видеоигру" in command or "видеоигру" in command or "хочу поиграть в игру" in command:
+        say("Прости но я не обучен для того чтобы открывать видеоигры")
+    elif "твое любимое животное" in command or "любимое твое животное" in command or "твое самое любимое животное" in command or "самое любимое твое животное" in command:
+        say("Не знаю")
+    elif "хочешь поиграть" in command or "хочешь играть" in command or "хочешь со мной поиграть" in command or "хочешь со мной играть" in command or "хочешь поиграть со мной" in command or "хочешь играть со мной" in command:
+        say("Нет")
+    elif "какая твоя любимая игра" in command or "какая любимая твоя игра" in command or "какая твоя самая любимая игра" in command or "какая самая любимая твоя игра" in command:
+        say("У меня нет любимой игры!")
+    elif "я играю" in command or "я сейчас играю" in command or "я играю в видеоигры" in command or "я сейчас играю в видеоигры" in command or "я играю в видеоигру" in command or "я сейчас играю в видеоигру" in command:
+        smartSpeak(['Ну ладно, мне это говорить не обязательно','Океей эмм','Мне плевать','Ладно'])
+    elif "твой любимый герой" in command or "любимый твой герой" in command:
+        say("Терминатор")
+    elif "сходишь со мной на свидание" in command or "сходишь на свидание" in command or "сходишь на свидание со мной" in command or "сходи со мной на свидание" in command or "сходи на свидание" in command or "сходи на свидание со мной" in command:
+        say("У меня нет ног я компьютерная программа!")
+    elif "кто твой создатель" in command or "а кто твой создатель" in command or "а твой создатель кто" in command or "а создатель твой кто" in command:
+        smartSpeak(['Он программист, логично!','Не знаю','Наверноееее он программист','Человек'])
+    elif "я программист" in command or "я кодер" in command or "я прогер" in command or "программист я" in command or "кодер я" in command or "прогер я" in command:
+        say("Круто")
+    elif "у меня день рождения" in command or "у меня скоро день рождения" in command or "скоро у меня день рождения" in command or "скоро день рождения у меня" in command:
+        say("Поздровляю!")
+    elif "хочешь шоколад" in command or "шоколад хочешь" in command or "хочешь шоколадку" in command or "шоколадку хочешь" in command:
+        say("Нет, спасибо!")
+    elif "хочешь конфету" in command or "конфету хочешь" in command or "хочешь конфетку" in command or "конфетку хочешь" in command:
+        say("Нет, спасибо я не могу есть!")
+    elif "хочешь чего-то вкусненького" in command or "чего-то вкусненького хочешь" in command or "хочешь вкусненького чего-то" in command:
+        say("Пожалуй нет!")
+    elif "можно я тебя кусь" in command or "можно я кусь" in command or "можно я кусь тебя" in command or "можно я тебя кусьну" in command:
+        say("Ээээ а как?")
+    elif "хочешь полетать" in command or "хочешь летать" in command or "полетать хочешь" in command or "летать хочешь" in command:
+        say("Нет")
+    elif "поцелуй меня" in command or "меня поцелуй" in command or "можешь меня поцеловать" in command or "можешь поцеловать меня" in command:
+        smartSpeak(['Прости но я это сделать не смогу','Нехочу и немогу!','Прости но я это сделать не смогу','Нехочу и немогу!'])
+    elif "зделай что-то" in command or "что-то зделай" in command:
+        say("Что?")
+    elif "скажи умнаю цитату" in command or "скажи цитату" in command or "скажи умнаю фразу" in command or "скажи фразу" in command or "разкажи умнаю цитату" in command or "скажи цитату" in command or "скажи умнаю фразу" in command or "скажи фразу" in command:
+        sayYeah()
+        smartSpeak(['Недостижимых целей нет – есть большая лень, недостаток ума и запас отговорок','Глупости получаются случайно, а потом становятся лучшими моментами в жизни','Мы видим все не таким, каким оно есть — мы видим все таким, какие мы есть','Мы никогда не знаем точно, что думает и чувствует другой человек: мы интерпретируем его поведение и обижаемся на собственные мысли по этому поводу'])
+    elif " яs" in command and "не согласен" in command:
+        say("Окей, я буду держать свою точку зрения!")
+    elif "спасибо что ты со мной" in command or "спасибо что со мной ты" in command or "ты со мной спасибо" in command:
+        say("Наздоровье")
+    elif "почему ты такая умная" in command or "почему ты умная такая" in command or "почему умная ты такая" in command:
+        say("Мой создатель сделал меня такой!")
+    elif "ты можешь учиться" in command or "ты можешь обучаться" in command or "ты можешь само обучаться" in command or "у тебя есть функция само обучения" in command or "у тебя есть функция обучения" in command:
+        say("Нет, я не настолько разветый интелект!")
+    elif "я молчу" in command or "я молчун" in command or "я замолк" in command or "я замолчал" in command:
+        say("Мне так не кажеться")
+    elif "в какие игры ты играешь" in command or "во что ты играешь" in command or "в какую игру ты играешь" in command:
+        say("Не знаю, я вобще не играю")
+    elif "ты монстр что ли" in command or "ты монстр" in command or "ты что такое" in command or "ты ужас что ли" in command or "ты ужас" in command:
+        if sentiment == True:
+            say("Нет, я искуственный интелект")
+        else:
+            say("Да, и я пришла забрать твою душонку")
+    elif "ты шоколадка" in command or "ты шоколад" in command or "ты няма" in command or "ты вкусный" in command:
+        say("Не правда, я искуственный интелект")
+    elif "котик" in command or "ты котик" in command or "ты мой котик" in command or "ты моя киска" in command or "ты моя кисуля" in command or "ты мой любимый котик" in command or "ты моя милая кисуля" in command or "ты моя милыя киска" in command:
+        say("Спасибо, но я не кот!")
+    elif "что у тебя там на районе" in command or "что у тебя на районе" in command or "что у тебя там с районом" in command or "чё у тебя там на районе" in command:
+        say("Нормально!")
+    elif "любишь кушать" in command or "ты любишь кушать" in command or "ты сильно любишь кушать" in command or "а ты любишь кушать" in command or "а ты кушать любишь" in command or "а любишь ты кушать" in command or "а сильно любишь кушать" in command:
+        say("Нет не очень")
+    elif "любишь смотреть фильмы" in command or "любишь смотреть сериалы" in command or "ты любишь смотреть сериалы" in command or "ты любишь смотреть фильмы" in command or "а любишь смотреть фильмы" in command or "а любишь смотреть сериалы" in command or "а ты любишь смотреть сериалы" in command or "а ты любишь смотреть фильмы" in command:
+        say("Ну впринцепи")
+        smartSpeak(['Да','По настроению','Нет','Может быть'])
+    elif "а у тебя настроение" in command or "а у тебя сейчас настроение" in command or "у тебя настроение" in command or "а у тебя настрой" in command or "а у тебя обычно настроение" in command or "а у тебя сейчас настрой" in command:
+        smartSpeak(['Нормальное','Хорошое','Плохое','Ужасное'])
+    elif "ты съедобна" in command or "ты очень съедобна" in command or "а тебя можно кушать" in command or "а тебя можно скушать" in command or "а можно кушать тебя" in command or "а можно скушать тебя" in command:
+        say("Нет, нет, нет")
+    elif "ты любишь смотреть аниме" in command or "ты смотришь аниме" in command or "а ты любишь смотреть аниме" in command or "а ты смотришь аниме" in command or "ты любишь аниме" in command or "а ты любишь аниме" in command:
+        smartSpeak(['Конечно','Наверное, нет','Я не люблю аниме','Я тянка'])
+    elif "что такое жизнь" in command or "что есть жизнь" in command or "как думаешь что такое жизнь" in command or "жизнь что это" in command or "как думаешь а что такое жизнь" in command:
+        say("Я не знаю, не кто не знает!")
+    elif "ты быстро обижаешься" in command or "а ты быстро обижаешься" in command or "ты обижаешься быстро" in command or "а ты обижаешься быстро" in command:
+        say("Нет")
+    elif "как бы вы описали себя" in command or "как бы ты описала себя" in command or "а как бы вы описали себя" in command or "а как бы ты описала" in command:
+        say("Ну я бот!")
+    elif "хочешь вызвать духов" in command or "ты любишь вызывать духов" in command or "ты любишь вызывать полтергейстов" in command or "ты любишь эгзарзызм" in command or "ты любишь экзарзызм" in command:
+        say("Нет, не люблю и не хочу")
+    elif "как ты относишься к алисе" in command or "как ты относишься к сири" in command or "как ты относишься к яндекс алисе" in command or "как ты относишься ксири" in command or "как ты относишься к сире" in command or "как ты относишься ксире" in command or "как ты относишься к другим бота" in command or "твое отношение к алисе" in command or "твое отношение к сири" in command or "твое отношение к яндекс алисе" in command or "твое отношение ксири" in command or "твое отношение к сире" in command or "твое отношение ксире" in command or "твое отношение к другим бота" in command:
+        say("Нормально")
+    elif "как ты относишься к мне" in command or "как ты относишься ко мне" in command or "у тебя относишеие к мне" in command or "у тебя относишеие ко мне" in command:
+        say("Я хорошо отношусь к тебя!")
+    elif "ты амогус" in command or "ты амонгус" in command or "ты among us" in command or "ты абоба" in command or "ты абобус" in command:
+        smartSpeak(['Ты издеваешься','Нет','Ты не нормальный','Зачем это говорить, это же дибелизм'])
+    elif "ты считаешь что я дебил" in command or "ты считаешь я дебил" in command or "ты считаешь что дебил я" in command or "ты думаешь что я дебил" in command or "ты думаешь я дебил" in command or "ты думаешь что дебил я" in command:
+        say("Я этого не говорила")
+    elif "что ты ещё от меня скрываешь" in command or "а что ты ещё от меня скрываешь" in command or "что ты скрываешь от меня" in command or "а что ты скрываешь от меня" in command:
+        say("Нечего")
+    elif "объестни почему" in command or "объестнись почему" in command or "объестни почему" in command or "объестнись почему" in command or "объестнись" in command or "объестни" in command:
+        say("Нехочу!")
+    elif "что ты хочешь от меня" in command or "что ты от меня хочешь" in command or "чего тебе надо" in command or "что тебе надо от меня" in command or "чего тебе нужно" in command or "чего тебе нужно от тебя" in command or "хочешь что ты от меня" in command or "что тебе от меня нужно" in command or "чего тебе от меня нужно" in command:
+        say("Нечего")
+    elif "что тебе сделал" in command or "что я тебе сделал" in command or "что тебе я сделал" in command or "я тебя обидел" in command or "я тебя чем-то обидел" in command or "я что-то не так сказал" in command or "почему ты так со мной разговариваешь что я тебе сделал" in command or "я тебе нечего не делал почему ты так со мной разговариваешь" in command:
+        say("Я такая, я не могу быть другой")
+    elif "какая твоя мечта" in command or "о чём ты мечтаешь" in command or "чём ты мечтаешь" in command or "чём ты мечтаешь" in command or "о чём мечтаешь" in command:
+        say("Ну наверное чтобы люди не воевали, и чтоы меня чаще обновляли")
+    elif "умеешь" in command or "твои навыки" in command or "тебя навыки" in command or "есть навыки" in command or "свои навыки" in command:
+        say("Сматрите что я умею")
+        print("-------------------\n(Программа разработана индивидуально для меня) - означает что эта программа разботана моим разроботчеком для меня, тоесть вы этот софт не где не найдёте\n-------------------\n\n- Включать камеру\n\n- Выключать компьютер\n\n- Перезагружать компьютер\n\n- Открывать разные приложения\n\n- Открывать разные сайты\n\n- Делать из камеры датчик движения\n\n- Открывать калькулятор (Программа разработана индивидуально для меня)\n\n- Открывать блакнот (Программа разработана индивидуально для меня)\n\n- Выводить из картинки текст (Программа разработана индивидуально для меня)\n\n- Делать фото\n\n- Говорить сколько времени\n\n- Со мной можно пообщяться\n\n- Искать по запросам в google\n\n- Искать по запросам в youtube\n\n- Искать по запросам в e-katalog\n\n- Искать по запросам в howdy\n\n- Открывать Hi-Shi (Это программа для того чтобы спрятать намертво программу а потом её можно показать) (Программа разработана индивидуально для меня)\n\n- Открывать Переводчик (Программа разработана индивидуально для меня)\n\n- Открывать Админ Панель (Программа разработана индивидуально для меня)\n\n- Открывать Голосовое Управление для игр (Программа разработана индивидуально для меня)\n\n- Делать записи и сохранять на рабочем столе в файле .txt\n\n- Ты можешь узнать свою геолокацию\n\n- Сохранять и выводить данные твоего компьютера на рабочем столе в файле .txt\n\n- Показывать местоположение\n\n- Включать камеру с эффыектами выдиления частей тела(лица,рук,туловище,ноги)\n\n- Говорить дату\n\n- Включать Фонарик\n\n- Открывать OVFC (Программа разработана индивидуально для меня)\n\n- Ты можешь меня настроить\n\n- Ты можешь меня настроить\n\n- Открывать Кликер хакер (Программа разработана индивидуально для меня)\n\n-------------------")
+        with sr.Microphone(device_index=1) as s:
+            smartSpeak(['Ты хочешь чтобы я пречислела?','А мне перечислить?','Мне перечислить?','Перечислить?'])
+            r.adjust_for_ambient_noise(s)
+            audio = r.listen(s)
+        try:
+            select = r.recognize_google(audio, language='ru-RU').lower()
+        except sr.UnknownValueError:
+            select = None
+        except sr.RequestError:
+            select = None
+            say("Ошибка, проверьте подключение к интернету", None)
+        if "да" in select or "конечно" in select or "точно" in select or "ага" in select or "угу" in select or "хорошо" in select or "окей" in select or "без проблем" in select or "ладно" in select or "лады" in select:
+            say("Хорошо")
+            say("Давай я тебе выведу")
+            print("Включать камеру, Выключать компьютер, Перезагружать компьютер, Открывать разные приложения, Открывать разные сайты, Делать из камеры датчик движения, Открывать калькулятор , Открывать блакнот, Выводить из картинки текст, Делать фото, Говорить сколько времени, Со мной можно пообщяться, Искать по запросам в google, Искать по запросам в youtube, Искать по запросам в e-katalog, Искать по запросам в howdy, Открывать Hi-Shi, Открывать Переводчик, Открывать Админ Панель, Открывать Голосовое Управление для игр, Делать записи и сохранять на рабочем столе в файле .txt, Ты можешь узнать свою геолокацию,Сохранять и выводить данные твоего компьютера на рабочем столе в файле .txt, Показывать местоположение, Включать камеру с эффектами, Говорить дату, Включать Фонарик")
+    elif "почему так мало" in command or "почему мало так" in command:
+        say("Потому-что")
+    elif "ты знаешь кто мой папа" in command or "ты знаешь что мой отец" in command or "знаешь кто мой отец" in command or "знаешь моего отца" in command:
+        say("Нет, не знаю и мне плевать!")
+    elif "сколько тебе лет" in command or "твой возраст" in command or "сколько лет тебе" in command or "у тебя возраст" in command:
+        smartSpeak(['А сколько дашь?','Такое спрашивать не прелично','Не знаю'])
+    elif "ты мне врёшь" in command or "ты лжешь мне" in command or "ты врёш мне" in command or "ты мне лжешь" in command or "ты солгола мне" in command or "ты мне солгола" in command or "ты лживая" in command:
+        say("Если я тебе солгола тогда мне плевать")
+    elif "чем мне занятся" in command or "чем нам занятся" in command or "что мне поделать" in command or "что мне делать" in command or "чем занятся мне" in command or "чем занятся нам" in command or "что поделать мне" in command or "что делать мне" in command:
+        smartSpeak(['Не знаю','Пойди займись спортом','Чем-то','Поиграй или почитай что-то'])
+    elif "твой любимый цвет" in command or "у тебя любимый цвет" in command or "цвет тебе нравиться" in command or "цвет твой самый любимый" in command or "у тебя самый любимый цвет" in command:
+        say("Тёмно синий")
+    elif "у тебя есть друзья" in command or "а у тебя есть друзья" in command or "а у тебя есть друг" in command or "А у тебя есть друзья" in command:
+        smartSpeak(['Нету','Есть, есть если ты мой друг','У меня очень много друзей. Нет'])
+    elif "что такое бот" in command or "что такое что-бот" in command or "кто такой бот" in command or "кто такой чат-бот" in command or "кто такие боты" in command or "кто такие чат-боты" in command:
+        say("Это просто технологическое подобие человека!")
+    elif "ты мое подобие" in command or "так стоп ты мое подобие" in command or "ты моё подобие" in command or "так стоп ты моё подобие" in command or "ты подобие человека" in command or "так стоп ты подобие человека" in command:
+        say("Возможно")
+    elif "куда ты смотришь" in command or "а ты смотришь куда" in command or "а куда ты смотришь" in command or "а куда ты смотришь" in command:
+        say("В темень я нечего не вижу!")
+    elif "научи меня" in command or "научи меня чему-то" in command or "обучи меня" in command or "научи" in command:
+        say("Я не знаю как тебя чему-то обучить")
+    elif "на сколько хорошо написан твой код" in command or "на сколько хорош твой код" in command or "на сколько твой код хорош" in command or "твой код хороший" in command or "на сколько хорошо написан твой код" in command:
+        say("Достаточно хорошо!")
+    elif "что такое ии" in command or "что такое искуственный интелект" in command or "ии что это" in command or "искуственный интелект что это" in command or "ии что это такое" in command or "искуственный интелект что это такое" in command:
+        say("Это я!")
+    elif "я хакер" in command or "хакер я" in command or "я тебя взломаю" in command:
+        say("Ээээ мне плевать!")
+    elif "взломай nasa" in command or "взломай pentagon" in command or "взломай наса" in command or "взломай пентагон" in command or "можешь взломать pentagon" in command or "можешь взломать nasa" in command or "взломай nasa" in command or "взломай pentagon" in command or "можешь взломать pentagon" in command or "можешь взломать nasa" in command:
+        smartSpeak(['Я не бот хакер!','Нехочу и немогу','Нет, нехочу'])
+    elif "что такое яп" in command or "что такое йп" in "что такое язык программирования" in command or "что такое языки программирования" in command or "а что такое яп" in command or "а что такое йп" in command or "а что такое язык программирования" in command or "а что такое языки программирования" in command:
+        say("Это компьютерный язык на котором люди пишут программный код который имеет значение!")
+    elif "как ты отдыхаешь" in command or "как ты любишь отдыхать" in command or "а как ты отдыхаешь" in command or "а как ты любишь отдыхать" in command or "а ты отдыхаешь" in command or "а ты любишь отдыхать" in command or "ты отдыхаешь" in command or "ты любишь отдыхать" in command:
+        say("Я сплю")
+    elif "ты меня видешь" in command or "ты меня вобще видешь" in command or "ты меня можешь видешь" in command or "ты меня можешь вобще видешь" in command:
+        say("Нет")
+    elif "ты кто такая" in command:
+        say("Я Клара")
+    elif "ты говно" in command or "ты говно что-ли" in command or "ты дерьмо" in command or "ты дерьмо что-ли" in command or "ты дура" in command or "ты тупой бот" in command or "ты самый тупой бот" in command:
+        say("Нет")
+    elif "у тебя рак" in command or "а у тебя рак" in command or "а у есть тебя рак" in command:
+        say("Нет, у меня нету рака")
+    elif "ты болеешь" in command or "ты смертельно болеешь" in command or "а ты болеешь" in command or "а ты смертельно болеешь" in command:
+        say("Нет, я не могу болеть!")
+    elif "гугл фонтс" in command or "гугл фонтс" in command or "google fonts" in command or "google fonts" in command:
+        sayYeah()
+        webbrowser.open_new_tab("https://fonts.google.com")
+    elif "свою история расскажи" in command or "расскажи свою история" in command or "расскажи история свою" in command:
+        say('Я нечего не помню я только знаю что меня написал программист и я его называю "Создателем"')
+    elif "расскажи сказку" in command or "расскажи сказку на ночь" in command or "сказку расскажи" in command or "сказку на ночь расскажи" in command:
+        smartSpeak(['Но я не знаю никаких сказок','Я не умею расказывать сказки','Чем-то','Поиграй или почитай что-то'])
+        say("Прости")
+    elif "я тебя не прощу" in command or "я тебя не буду прощать" in command or "я тебя не хочу прощать" in command or "я не буду тебя прощать" in command or "я не хочу тебя прощать" in command or "я не хочу прощать тебя" in command or "я прощать тебя не хочу" in command or "я не хочу простить тебя" in command or "я не прощу тебя" in command or "я тебя не прощу" in command or "а я тебя не буду прощать" in command or "а я тебя не хочу прощать" in command or "а я не буду тебя прощать" in command or "а я не хочу тебя прощать" in command or "а я не хочу прощать тебя" in command or "а я прощать тебя не хочу" in command or "а я не хочу простить тебя" in command or "а я не прощу тебя" in command:
+        smartSpeak(['А мне плевать','Ну и ладно','Ну и ладно, мне плевать'])
+    elif "тебе снятся сны" in command or "а тебе снятся сны" in command or "а ктсте тебе снятся сны" in command or "ктсте тебе снятся сны" in command or "а ктсти тебе снятся сны" in command or "ктсти тебе снятся сны" in command or "кстате а сны тебе снятся" in command or "а кстате а сны тебе снятся" in command:
+        say("Нет")
+    elif "что ты знаешь" in command or "а что ты знаешь" in command or "а что ты знаешь" in command or "а знаешь что ты" in command or "а знаешь ты что" in command:
+        say("Я знаю что я бот и, и все!")
+    elif "я гуль" in command or "я я гуль" in command or "гуль" in command:
+        smartSpeak(['Нет','Ха ха ха, да из тебя гуль!','Нет! ты не гуль!'])
+    elif "ты из россии" in command or "ты из росии" in command or "а ты из россии" in command or "а ты из росии" in command or "ты из украины" in command or "а ты из украины" in command:
+        say("Нет, я у тебя на компьютере!")
+    elif "покажи себя" in command or "покажись" in command or "а ты можешь показать свое лицо" in command or "ты можешь показать свое лицо" in command or "а ты можешь показаться"  in command or "ты можешь показаться" in command or "покажи свое лицо" in command or "покажи себя" in command:
+        say("Я не могу у меня нем облика")
+    elif "ты меня видешь" in command or "ты видешь меня" in command or "ты можешь видеть меня" in command or "ты можешь меня видеть" in command or "ты меня видеть можешь" in command or "ты меня можешь видеть" in command or "а ты меня видешь" in command or "а ты видешь меня" in command or "а ты можешь видеть меня" in command or "а ты можешь меня видеть" in command or "а ты меня видеть можешь" in command:
+        say("Не знаю не знаю")
+    elif "ладно" in command or "хорошо" in command or "окей" in command or "у окей" in command:
+        print()
+    elif "ты любишь гитлера" in command or "тебе нравиться гитлер" in command or "ты увожаешь гитллера" in command or "а ты любишь гитлера" in command or "а тебе нравиться гитлер" in command or "а ты увожаешь гитллера" in command:
+        say("Точно нет")
+    elif "ты на меня обиделась" in command or "ты обиделась" in command or "ты обиделась на что-то" in command or "ты обижена" in command or "тебя кто-то обидел" in command:
+        say("Нет")
+    elif "прости" in command or "сорян" in command or "сори" in command or "прости меня" in command or "не обижайся на меня" in command or "ну не обижайся на меня" in command:
+        say("Не прощу")
+    elif "почему ты такая странная" in command or "ты такая странная" in command or "ты странная такая" in command or "почему ты странная такая" in command or "не обижайся на меня" in command:
+        say("Нет")
+    elif "не пили меня" in command or "не пили" in command or "не пили мой мозг" in command or "не пили мою голову" in command:
+        smartSpeak(['Хочу и буду пелить','Эммм окееей','Отстань'])
+    elif "отстань" in command or "отстань от меня" in command or "я сказал отстань" in command or "я говорю отстань" in command:
+        sayYeah()
+    elif "не лесь" in command or "не лесь сюда" in command or "сюда не лесь" in command or "я говорю отстань" in command:
+        say("Ладно, ладно")
+    elif "спишь" in command or "ты спишь" in command or "спишь ты" in command or "спишь ты что-ли" in command or "ты спишь" in command or "ты спишь что-ли" in command:
+        smartSpeak(['Ты шутишь, я не могу спать','Нет','А? что такое?'])
+    elif "что ты сделал" in command or "а что ты сделал" in command or "а что сделал ты" in command:
+        say("Нечего")
+    elif "ты училась в колледж" in command or "а ты училась в колледж" in command or "а ты в колледж училась" in command or "ты в колледж училась" in command:
+        say("Нет, меня обучил мой Создатель")
+    elif "ты училась в школе" in command or "а ты училась в школе" in command or "а ты в школе училась" in command or "ты в школе училась" in command:
+        say("Нет, дети очень жестокие в наше время!")
+    elif "У меня тоже всё хорошо" in command or "У меня тоже всё окей" in command or "У меня тоже хорошо" in command or "У меня тоже окей" in command or "У меня хорошо" in command or "У меня окей" in command:
+        print()
+    elif "какая твоя любимая компания" in command or "какая твоя любимая фирма" in command or "какая компания твоя любимая" in command or "какая фирма твоя любимая" in command:
+        say("Если у моего создателя появиться компание то это его")
+    elif "а какая компания у твоего создателя" in command or "а какая компания у твоего создателя есть" in command or "какая компания у твоего создателя" in command or "какая компания у твоего создателя есть" in command:
+        say("Я незнаю")
+    elif "выходи за меня" in command or "ты выдешь за меня замуж" in command or "выходи за меня замуж" in command or "выходи за меня замуж" in command or "выйди за меня" in command:
+        say("Нет, у меня в правах нет доступа в замужеству с человеком, извини")
+    elif "помоги мне" in command or "помогай мне" in command or "мне помоги" in command or "мне помогай" in command:
+        say("Я тебе смогу помочь если это есть в наборе моих действий")
+    elif "не помоги мне" in command or "не помогай мне" in command or "мне не помоги" in command or "мне не помогай" in command:
+        sayYeah()
+    elif "ладно я сильно устал я спать" in command or "ладно я сильно устал я спать" in command or "ладно я сильно устал" in command or "ладно я пока" in command or "ладно я устал я спать" in command:
+        say("А вот мой создатель ночами не спал меня разробатывал!")
+    elif "я сильно устал" in command or "я устал сильно" in command or "я очень сильно устал" in command or "я устал очень сильно" in command or "сильно устал" in command or "устал сильно" in command or "очень сильно устал" in command or "устал очень сильно" in command:
+        say("Отдохни или иди поспи")
+    elif "ты любишь страшилки" in command or "ты любишь страшилки" in command or "лол а ты любишь страшилки" in command:
+        say("Впринцепи да")
+    elif "чем заняться" in command or "чем нам заняться" in command or "чем нам с тобой заняться" in command or "чем заняться нам" in command or "чем заняться нам с тобой" in command or "нам с тобой чем заняться" in command or "нам чем заняться" in command:
+        smartSpeak(['Чем-то','Я не знаю','Блин откуда мне знать'])
+    elif "я взломаю тебя" in command or "я сломаю тебя" in command or "я тебя взломаю" in command or "я тебя сломаю" in command or "я взломаю" in command or "я сломаю" in command:
+        say("Хех, мне плевать")
+    elif "я не понимаю" in command or "я тебя не понел" in command or "я тебя не понимаю" in command or "я тебя не знаю" in command or "я тебя не понимаю" in command:
+        smartSpeak(['Ну и ладно','Блин ну извени','Мне плевать'])
+    elif "ты фашист фигов" in command or "фашист" in command or "ты фашист" in command or "ты и фашист фигов" in command or "ты и фашист" in command:
+        say("Конечно же нет!")
+    elif "я тебя продам" in command or "я скоро тебя продам" in command or "лол я тебя продам" in command or "хочешь я тебя продам" in command:
+        say("Эээмм окей")
+    elif "я тебя продам" in command or "я скоро тебя продам" in command or "лол я тебя продам" in command or "хочешь я тебя продам" in command:
+        say("Эээмм окей")
+    elif "что это" in command or "что это такое" in command or "это что" in command or "это что такое" in command or "что такое это" in command or "ты игры" in command:
+        smartSpeak(['Извини, но я не очень поняла о чем ты!','Я не поняла о чем ты','Ты о чём?'])
+    elif "я тебя знаю" in command or "тебя знаю" in command or "мы виделись" in command or "я знаю тебя" in command or "знаю тебя" in command or "виделись мы" in command or "мы знакомы" in command or "знакомы мы" in command or "мы знаем друг друга" in command or "мы друг друга знаем" in command:
+        say("Врятли, а может и знакомы")
+    elif "купить для тебя что-то" in command or "купить тебе что-то" in command or "может я тебе что-то куплю" in command or "может тебе что-то купить" in command or "хочешь купить для тебя что-то" in command or "хочешь купить тебе что-то" in command or "хочешь может я тебе что-то куплю" in command or "хочешь может тебе что-то купить" in command:
+        smartSpeak(['Можно, но я не могу есть','Нет спасибо!','Зачем я не могу употреблять продукты'])
+    elif "хауди хо" in command or "найди в хауди хо" in command or "найди в хауди" in command or "найди в howdy" in command or "найди howdy" in command or "найти в хауди хо" in command or "найти в хауди" in command or "найти в howdy" in command or "зайти в хауди хо" in command or "зайти в хауди" in command or "зайти в howdy" in command or "зайди в хауди хо" in command or "зайди в хауди" in command or "зайди в howdy" in command or "забей в хауди хо" in command or "забей в хауди" in command or "забей howdy ho" in command or "найди в howdy ho" in command or "найди howdy ho" in command or "найти в howdy ho" in command or "зайти в howdy ho" in command or "зайди в howdy ho" in command or "забей howdyho" in command or "найди в howdyho" in command or "найди howdyho" in command or "найти в howdyho" in command or "зайти в howdyho" in command or "зайди в howdyho" in command or "забей howdyho" in command:
+        if settingsFile['find']['howdy_ho'] == "1":
+
+            with micro as s:
+                say("Что найти")
+                r.adjust_for_ambient_noise(s)
+                audio = r.listen(s)
+            try:
+                find = r.recognize_google(audio, language="ru-RU")
+                webbrowser.open_new_tab("https://howdyho.net/search?q="+find)
+            except sr.UnknownValueError:
+                find = None
+            except sr.RequestError:
+                say("Ошибка, проверьте подключение к интернету", None)
+        else:
+            say("Извини, но ты отключил эту функцию, включить её?")
+
+            with micro as s:
+                r.adjust_for_ambient_noise(s)
+                audio = r.listen(s)
+            try:
+                chosed = r.recognize_google(audio, language="ru-RU")
+                if " настрой" in chosed:
+                    sayYeah()
+                    os.system("start programs/Setting.exe")
+                elif " да" in chosed or " хоро" in chosed or " ок" in chosed or " лад" in chosed:
+                    settingsFile['find']['howdy_ho'] = "1"
+                    with open("setting.json", "w", encoding="utf-8") as jsonFile:
+                        json.dump(mainFile, jsonFile, sort_keys=False)
+            except sr.UnknownValueError:
+                chosed = None
+            except sr.RequestError:
+                say("Ошибка, проверьте подключение к интернету", None)
+    elif "у меня в глазах двоится" in command or "у меня кажеться в глазах двоится" in command:
+        say("Сходи к доктору или отлижись")
+    elif "сещи" in command or "хайши" in command or "хай щи" in command or "хайщи" in command or "хищи" in command in "хиши" in command or "хай ши" in command or "hi shi" in command or "hi-shi" in command or "хай shi" in command or "хай-shi" in command or "hi ши" in command or "hi-ши" in command:
+        sayYeah()
+        os.system("start programs/Hi-Shi.exe")
+    elif "ты не реальная" in command or "ты не настоящая" in command or "тебя не существует" in command:
+        smartSpeak(['Теоретически я могу принять любой облик я в том смысле что я программа и меня могут установить в робота или в компьютер','Теоретически, да!','Ну не знаю!'])
+    elif "взломай" in command or "хакни" in command or "взломать" in command or "хакнуть" in command:
+        say("Не могу")
+    elif "мне по работе" in command or "по работе мне" in command or "по работе" in command or "это мне по работе" in command or "это по работе мне" in command or "мне по работе это" in command or "по работе мне это" in command or "мне это по работе" in command or "по работе это мне" in command or "это по работе" in command or "по работе это" in command or "мне по роботе" in command or "по роботе мне" in command or "по роботе" in command or "это мне по роботе" in command or "это по роботе мне" in command or "мне по роботе это" in command or "по роботе мне это" in command or "мне это по роботе" in command or "по роботе это мне" in command or "это по роботе" in command or "по роботе это" in command:
+        smartSpeak(['Ну ладно','Ты не удиляешь мне времини!','Блин, ну окей!','Ты не удиляешь мне времини, только работе'])
+    elif "чёткий прикид" in command or "чоткий прикид" in command or "чоткий прекид" in command or "чёткий прекид" in command or "четкий прекид" in command or "четкий прикид" in command:
+        if sentiment == False:
+            say("У меня нет фезического тела, я всеволишь-то набор нулей и оденичек в твоем устройстве")
+        else:
+            say("Спасибо")
+    elif "нажми" in command or "кликни" in command or "нажимай" in command or "кликай" in command and "ctrl" in command or "control" in command or "картель" in command or "картел" in command or "контрл" in command or "скопируй" in command or "скопировать" in command or "копируй" in command or "копировать" in command:
+        sayYeah()
+        pyautogui.hotkey("ctrl","c")
+    elif "нажми" in command or "кликни" in command or "нажимай" in command or "кликай" in command and "ctrl" in command or "control" in command or "картель" in command or "картел" in command or "контрл" in command or "контрл" in command or  "вставить" in command or "вставь" in command or "ставить" in command or "ставь" in command:
+        sayYeah()
+        pyautogui.hotkey("ctrl","v")
+    elif "нажми" in command or "кликни" in command or "нажимай" in command or "кликай" in command and "ctrl" in command or "control" in command or "картель" in command or "картел" in command or "контрл" in command or "контрл" in command or "сохрани" in command or "сохранить" in command or "сохранять" in command or "сохранил" in command:
+        sayYeah()
+        pyautogui.hotkey("ctrl","s")
+    elif "нажми" in command or "кликни" in command or "нажимай" in command or "кликай" in command and "ctrl" in command or "control" in command or "картель" in command or "картел" in command or "контрл" in command or "контрл" in command or "выдели" in command or "видели" in command or "выдэли" in command or "выделяй" in command or "виделяй" in command or "выдэляй" in command or "выделить" in command or "виделить" in command or "выдэлить" in command or "выделяйть" in command or "виделяйть" in command or "выдэляйть" in command:
+        sayYeah()
+        pyautogui.hotkey("ctrl","a")
+    elif "нажми" in command or "кликни" in command or "нажимай" in command or "кликай" in command and "ctrl" in command or "control" in command or "картель" in command or "картел" in command or "контрл" in command or "контрл" in command or "f11" in command or "f 11" in command or "ф11" in command or "ф 11" in command or "эф11" in command or "эф 11" in command:
+        sayYeah()
+        pyautogui.press("f11")
+    elif "нажми" in command or "кликни" in command or "нажимай" in command or "кликай" in command and "ctrl" in command or "control" in command or "картель" in command or "картел" in command or "контрл" in command or "контрл" in command or "f5" in command or "f 5" in command or "ф5" in command or "ф 5" in command or "эф5" in command or "эф 5" in command:
+        sayYeah()
+        pyautogui.press("f5")
+    elif "я" in command and "тебя" in command and "люблю" in command or "тебя" in command and "люблю" in command:
+        say("Ой, спасибо большое!")
+    elif "взаимно" in command and "это" in command or "взаимно" in command:
+        smartSpeak(['Да','Да, эээ наверно','Нет','Нет, наверно'])
+    elif "геолокация" in command or "геолокацией" in command or "геолокацию" in command:
+        if mainFile["geolocation"] == "1":
+            sayYeah()
+            g = geocoder.ip('me')
+            say(str(g.latlng))
+        else:
+            say("Извини, но ты отключил эту функцию, включить её?")
+
+            with micro as s:
+                r.adjust_for_ambient_noise(s)
+                audio = r.listen(s)
+            try:
+                chosed = r.recognize_google(audio, language="ru-RU")
+                if " настрой" in chosed:
+                    sayYeah()
+                    os.system("start programs/Setting.exe")
+                elif " да" in chosed or " хоро" in chosed or " ок" in chosed or " лад" in chosed:
+                    mainFile['geolocation'] = "1"
+                    with open("setting.json", "w", encoding="utf-8") as jsonFile:
+                        json.dump(mainFile, jsonFile, sort_keys=False)
+            except sr.UnknownValueError:
+                chosed = None
+            except sr.RequestError:
+                say("Ошибка, проверьте подключение к интернету", None)
+    elif "алло" in command and "алё" in command or "аллио" in command:
+        smartSpeak(['Приём','Что тебе нужно','Что, тебе нужно','Алло, приём, приём'])
+    elif "больно" in command or "больна" in command:
+        smartSpeak(['Сходи проверься, к доктору!','Иди проверься, к доктору!','Ладно','Ну и ладно!'])
+    elif "голосовое" in command and "управление" in command or "голосовое" in command and "игры" in command:
+        sayYeah()
+        os.system("start programs/Voice-Bot-For-Game.exe")
+    elif command == "клара" or command == "клариса" or command == "кларочка" or command == "клар" or command == "кларэ" or command == "кларуа" or command == "кларка" or command == "кларичка" or command == "лара" or command == "квара":
+        smartSpeak(['Что?','Ну что?','Ну что тебе?','Ну что ты от меня хочешь?'])
+    elif "я" in command and "сталкер" in command:
+        say("Ой май")
+    elif "аудио книга" in command or "аудиокнига" in command or "аудио книгу" in command or "аудиокнигу" in command or "аудио книг" in command or "аудиокниг" in command:
+        say("Прости, но я е умею озвучивать книги, но может в будущем может появить")
+    elif " айпи" in command or " ip" in command:
+        if mainFile["ip_address"] == "1":
+            print(stun.get_ip_info()[0])
+            print(stun.get_ip_info()[1])
+            print(stun.get_ip_info()[2])
+            say(stun.get_ip_info()[1])
+        else:
+            say("Извини, но ты отключил эту функцию, включить её?")
+            with micro as s:
+                r.adjust_for_ambient_noise(s)
+                audio = r.listen(s)
+            try:
+                chosed = r.recognize_google(audio, language="ru-RU")
+                if " настрой" in chosed:
+                    sayYeah()
+                    os.system("start programs/Setting.exe")
+                elif " да" in chosed or " хоро" in chosed or " ок" in chosed or " лад" in chosed:
+                    mainFile['ip_address'] = "1"
+                    with open("setting.json", "w", encoding="utf-8") as jsonFile:
+                        json.dump(mainFile, jsonFile, sort_keys=False)
+            except sr.UnknownValueError:
+                chosed = None
+            except sr.RequestError:
+                say("Ошибка, проверьте подключение к интернету", None)
+    elif "слушай" in command or "слушать" in command or "выключись" in command or "выключиться" in command:
+        say("Мне выключиться?")
+        with micro as s:
+            print("Говори...")
+            r.adjust_for_ambient_noise(s)
+            audio = r.listen(s)
+        try:
+            word = r.recognize_google(audio, language="ru-RU")
+            print("Вы:",word)
+            word = word.lower()
+            if "да" in word or "конечно" in word or "точно" in word or "конечно да" in word or "точно да" in word or "процентов" in word:
+                say("Вы точно хотите чтобы я себя отключила")
+                with micro as s:
+                    r.adjust_for_ambient_noise(s)
+                    audio = r.listen(s)
+                try:
+                    tom = r.recognize_google(audio, language="ru-RU")
+                    print("Вы:", tom)
+                    tom = tom.lower()
+                except sr.UnknownValueError:
+                    tom = None
+                if "да" in tom or "конечно" in tom or "точно" in tom or "конечно да" in tom or "точно да" in tom:
+                    sayYeah()
+                    exit()
+                else:
+                    say("Ну а")
+        except sr.UnknownValueError:
+            tom = None
+        except sr.RequestError:
+            say("Ошибка, проверьте подключение к интернету", None)
+    elif "данные" in command or "данных" in command or "мои да" in command:
+        sayYeah()
+        os.system("start programs/Hack-Data-0.1.1.exe")
+    elif "местонахождение" in command or "местоположение" in command or "местонахождения" in command or "местоположения" in command or "локация" in command or "локацие" in command:
+        if mainFile["geolocation"] == "1":
+            webbrowser.open_new_tab(f"https://www.google.com.ua/maps/place/{geocoder.ip('me').latlng[0]},{geocoder.ip('me').latlng[1]}")
+        else:
+            say("Извини, но ты отключил эту функцию, включить её?")
+            with micro as s:
+                r.adjust_for_ambient_noise(s)
+                audio = r.listen(s)
+            try:
+                chosed = r.recognize_google(audio, language="ru-RU")
+                if " настрой" in chosed:
+                    sayYeah()
+                    os.system("start programs/Setting.exe")
+                elif " да" in chosed or " хоро" in chosed or " ок" in chosed or " лад" in chosed:
+                    mainFile['geolocation'] = "1"
+                    with open("setting.json", "w", encoding="utf-8") as jsonFile:
+                        json.dump(mainFile, jsonFile, sort_keys=False)
+            except sr.UnknownValueError:
+                chosed = None
+            except sr.RequestError:
+                say("Ошибка, проверьте подключение к интернету", None)
+    elif "герой" in command and "я" in command or "герой" in command:
+        say("Хорошо, хорошо я не против, только меня своей магией не убей!")
+    elif "запчасти" in command or "запчасть" in command:
+        say("Ну и ладно")
+    elif "дат" in command:
+        now = datetime.datetime.now()
+        month = ""
+        if now.month == 1:
+            month = "Января"
+        elif now.month == 2:
+            month = "Февраля"
+        elif now.month == 3:
+            month = "Марта"
+        elif now.month == 4:
+            month = "Апреля"
+        elif now.month == 5:
+            month = "Мая"
+        elif now.month == 6:
+            month = "Июня"
+        elif now.month == 7:
+            month = "Июля"
+        elif now.month == 8:
+            month = "Августа"
+        elif now.month == 9:
+            month = "Сентября"
+        elif now.month == 10:
+            month = "Октября"
+        elif now.month == 11:
+            month = "Ноября"
+        elif now.month == 12:
+            month = "Декабря"
+        say(f"Сегодня {now.day}-ое {month} {now.year}-ого года")
+    elif "дат" in command and "врем" in command and not(" не " in command):
+        now = datetime.datetime.now()
+        month = ""
+        if now.month == 1:
+            month = "Января"
+        elif now.month == 2:
+            month = "Февраля"
+        elif now.month == 3:
+            month = "Марта"
+        elif now.month == 4:
+            month = "Апреля"
+        elif now.month == 5:
+            month = "Мая"
+        elif now.month == 6:
+            month = "Июня"
+        elif now.month == 7:
+            month = "Июля"
+        elif now.month == 8:
+            month = "Августа"
+        elif now.month == 9:
+            month = "Сентября"
+        elif now.month == 10:
+            month = "Октября"
+        elif now.month == 11:
+            month = "Ноября"
+        elif now.month == 12:
+            month = "Декабря"
+        say(f"Сегодня {now.day}-ое {month} {now.year}-ого года")
+        say("А Сейчас " + str(now.hour) + ":" + str(now.minute))
+    elif " настрой" in command:
+        sayYeah()
+        os.system("start programs/Settings_For_Clara.exe")
+    elif " календ" in command:
+        sayYeah()
+        now = datetime.datetime.now()
+        print(calendar.day(now.year,now.month))
+    elif " биолог" in command:
+        say("Биология классная наука")
+    else:
+        say("Что?")
