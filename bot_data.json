@@ -1,4 +1,13 @@
 {
   "пиши" : ["writeList", "sayYeah", "deletable", ["запиши","пиши","опиши"],"Готово"],
-  "пасиб": ["justTalking", "sayNothing", "doNotDeletable", [], ["Всегда пожалуйста", "Пожалуйста", "На здоровье", "Не за что"]]
+  "пасиб": ["justTalking", "sayNothing", "doNotDeletable", [], ["Всегда пожалуйста", "Пожалуйста", "На здоровье", "Не за что"]],
+  "у тракториста": ["justTalking", "sayNothing", "doNotDeletable", [], "Для такториста ты не годен, отсоси и будь свободен!"],
+  "соси": ["justTalking", "sayNothing", "doNotDeletable", [], "Для такториста ты не годен, отсоси и будь свободен!"],
+  "прив": ["justTalking", "sayNothing", "doNotDeletable", [], ["Привет","Здравствуй","Приветульки","Хай"]],
+  "даров": ["justTalking", "sayNothing", "doNotDeletable", [], ["Привет","Здравствуй","Приветульки","Хай"]],
+  "хелло": ["justTalking", "sayNothing", "doNotDeletable", [], ["Привет","Здравствуй","Приветульки","Хай"]],
+  "салют": ["justTalking", "sayNothing", "doNotDeletable", [], ["Привет","Здравствуй","Приветульки","Хай"]],
+  "как дел": ["justTalking", "sayNothing", "doNotDeletable", [], ["Хорошо, а у тебя","Хорошо","Нормально","Всё круто"]],
+  "орган": ["justTalking", "sayNothing", "doNotDeletable", [], ["Не поняла, кого ты там на органы сдать хочешь?"]],
+
 }
