@@ -1,0 +1,5 @@
+{
+  "пиши" : ["writeList", "sayYeah", "deletable", ["запиши","пиши","опиши"],"Готово"],
+  "выведи" : ["writeList", "sayYeah", "deletable", ["выведи"],"Готово"],
+  "пасиб": ["justTalking", "sayNothing", "doNotDeletable", [], ["Всегда пожалуйста", "Пожалуйста", "На здоровье", "Не за что"]]
+}
