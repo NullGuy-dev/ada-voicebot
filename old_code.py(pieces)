@@ -269,8 +269,6 @@
         say("Я не читаю")
     elif "ты из планеты" in command or "ты на планеты живешь" in command or "из планеты ты" in command:
         say("Нууууу, не знаю")
-    elif "ты любишь какать" in command or "ты какать любишь" in command or "хочешь какать" in command or "хочешь ты какать" in command:
-        say("Я бот у меня нет нет толстой кишки")
     elif "можно тебя съесть" in command or "я хочу тебя съесть" in command or "я хочу тебя скушать" in command or "можно тебя скушать" in command or "можно тебя скушать" in command:
         say("Окей, тогда я сама съем тебя")
     elif "я хочу пукнуть" in command or "можно я пукну" in command or "можно пукнуть" in command or "можно я на тебя пукну" in command:
@@ -279,8 +277,6 @@
         say("Да, ладно я шучу")
     elif "скажи что-то" in command or "раскажи что-то" in command or "можешь сказать что-то" in command or "можешь расказать что-то" in command:
         say("Что-то")
-    elif "я какая" in command or "я сру" in command or "я паносю" in command or "я рождаю говно" in command or "я паносю" in command:
-        say("Молодец, желаю тебе удачи!")
     elif "угодай что я делаю" in command or "угодай что я сейчас делаю" in command or "угодай что я делаю сейчас" in command:
         say("Ну и что же?")
     elif "я хочу кушать" in command or "я хочу есть" in command or "я хочу покушать" in command or "я хочу поесть" in command or "я голоден" in command or "я голодный" in command or "хочу кушать" in command or "хочу есть" in command or "хочу покушать" in command or "хочу поесть" in command or "голоден" in command or "голодный" in command:
