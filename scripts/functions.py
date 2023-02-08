@@ -50,45 +50,47 @@ def listenedText():
         return text
 
 def mainDB_BOT(dataForSAYYN, botQuetionDataJson, settingsDataFile, botSYSDataFile, nowVar, monthVar, command=None):
-    for key in list(botQuetionDataJson):
-        if key in command:
-            if botQuetionDataJson[key][1] == "sayYeah":
-                smartSpeak(botSYSDataFile[dataForSAYYN[0]])
-            if botQuetionDataJson[key][1] == "sayNope":
-                smartSpeak(botSYSDataFile[dataForSAYYN[1]])
-            if botQuetionDataJson[key][2] == "deletable":
-                listForClean = botQuetionDataJson[key][3] + botSYSDataFile["listForDeletingBotNameFromQuetion"]
-                cleanedCommand = deleteAll(listForClean, command)
-            if "writeList" in botQuetionDataJson[key][0]:
-                valueForLoadingToFile = cleanedCommand
-                with open(f"E:/Programming/note_{botSYSDataFile['CountForLastNumberFromNODE']}.txt", "w",
-                          encoding="utf8") as file:
-                    file.write(valueForLoadingToFile)
-                botSYSDataFile['CountForLastNumberFromNODE'] += 1
-                setDataToJson("bot_sys_data.json", botSYSDataFile)
-            if "turnOnCamera" in botQuetionDataJson[key][0]:
-                cap = cv2.VideoCapture(0)
-                while cap.isOpened():
-                    success, img = cap.read()
-                    img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-                    cv2.imshow("Camera", img)
-                    if cv2.waitKey(1) & 0xff == ord('x'):
-                        break
-                cap.release()
-                cv2.destroyAllWindows()
-            if botQuetionDataJson[key][0] == "showIp":
-                print(stun.get_ip_info()[1])
-                say(stun.get_ip_info()[1])
-            if "ScreenShot" in botQuetionDataJson[key][0]:
-                with mss() as sc:
-                    sc.shot(mon=0)
-            if "showDate" in botQuetionDataJson[key][0]:
-                say(f"Сегодня {nowVar.day}-ое {monthVar} {nowVar.year}-ого года", botSYSDataFile)
-            if "showTime" in botQuetionDataJson[key][0]:
-                say(f"А cейчас {str(nowVar.hour)}:{str(nowVar.minute)}", botSYSDataFile)
-            if botQuetionDataJson[key][-1] != "":
-                smartSpeak(botQuetionDataJson[key][-1], botSYSDataFile)
-    newYear(nowVar)
+    for keys in list(botQuetionDataJson):
+        keys = keys.split(", ")
+        for key in keys:
+            if key in command:
+                if botQuetionDataJson[key][1] == "sayYeah":
+                    smartSpeak(botSYSDataFile[dataForSAYYN[0]])
+                if botQuetionDataJson[key][1] == "sayNope":
+                    smartSpeak(botSYSDataFile[dataForSAYYN[1]])
+                if botQuetionDataJson[key][2] == "deletable":
+                    listForClean = botQuetionDataJson[key][3] + botSYSDataFile["listForDeletingBotNameFromQuetion"]
+                    cleanedCommand = deleteAll(listForClean, command)
+                if "writeList" in botQuetionDataJson[key][0]:
+                    valueForLoadingToFile = cleanedCommand
+                    with open(f"E:/Programming/note_{botSYSDataFile['CountForLastNumberFromNODE']}.txt", "w",
+                              encoding="utf8") as file:
+                        file.write(valueForLoadingToFile)
+                    botSYSDataFile['CountForLastNumberFromNODE'] += 1
+                    setDataToJson("bot_sys_data.json", botSYSDataFile)
+                if "turnOnCamera" in botQuetionDataJson[key][0]:
+                    cap = cv2.VideoCapture(0)
+                    while cap.isOpened():
+                        success, img = cap.read()
+                        img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                        cv2.imshow("Camera", img)
+                        if cv2.waitKey(1) & 0xff == ord('x'):
+                            break
+                    cap.release()
+                    cv2.destroyAllWindows()
+                if botQuetionDataJson[key][0] == "showIp":
+                    print(stun.get_ip_info()[1])
+                    say(stun.get_ip_info()[1])
+                if "ScreenShot" in botQuetionDataJson[key][0]:
+                    with mss() as sc:
+                        sc.shot(mon=0)
+                if "showDate" in botQuetionDataJson[key][0]:
+                    say(f"Сегодня {nowVar.day}-ое {monthVar} {nowVar.year}-ого года", botSYSDataFile)
+                if "showTime" in botQuetionDataJson[key][0]:
+                    say(f"А cейчас {str(nowVar.hour)}:{str(nowVar.minute)}", botSYSDataFile)
+                if botQuetionDataJson[key][-1] != "":
+                    smartSpeak(botQuetionDataJson[key][-1], botSYSDataFile)
+        newYear(nowVar)
 
 def userIsHappy():
     cap = cv2.VideoCapture(0)
