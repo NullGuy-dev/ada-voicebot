@@ -4,10 +4,8 @@ nltk.download('punkt')
 import tflearn, tensorflow, random, json, pickle, keras
 import numpy as np
 from nltk.stem.lancaster import LancasterStemmer
-
 stemmer = LancasterStemmer()
 intentsFile = "intents.json"
-
 with open(intentsFile, encoding="utf8") as file:
     data = json.load(file)
 try:
@@ -32,19 +30,13 @@ except:
 
     words = [stemmer.stem(w.lower()) for w in words if w != "?"]
     words = sorted(list(set(words)))
-
     labels = sorted(labels)
-
     training = []
     output = []
-
     out_empty = [0 for _ in range(len(labels))]
-
     for x, doc in enumerate(docs_x):
         bag = []
-
         wrds = [stemmer.stem(w.lower()) for w in doc]
-
         for w in words:
             if w in wrds:
                 bag.append(1)
@@ -81,14 +73,11 @@ def bag_of_words(s,words):
 
     s_words = nltk.word_tokenize(s)
     s_words = [stemmer.stem(word.lower()) for word in s_words]
-
     for se in s_words:
         for i, w in enumerate(words):
             if w == se:
                 bag[i] = 1
-
     return np.array(bag)
-
 def chat():
     while True:
         inp = input("> ")
@@ -101,5 +90,4 @@ def chat():
         for tg in data["data"]:
             if tg['tag'] == tag:
                 print(tg['tag'], results[0][results_index])
-
 chat()
